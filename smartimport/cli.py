@@ -19,11 +19,12 @@ def load(file_path:'path to the file containing data'):
     """ Transform a file from csv to json """
 
     # analyze file
-    json_result = smartimport.converter.convert(file_path)
-
-    # Dump json to stdout
-    # TODO make a real json stream later
-    print(json.dumps(json_result))
+    print('[')
+    for chunk in smartimport.converter.convert(file_path):
+        # TODO missing json decoration here
+        for d in chunk:
+            print(json.dumps(d), ',')
+    print(']')
 
 @begin.start
 def main(version=False):
