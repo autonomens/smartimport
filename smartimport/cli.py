@@ -3,7 +3,7 @@ import sys
 import json
 import begin
 import smartimport
-from smartimport import converter
+from smartimport import converter, api
 
 # TODO: remove below if statement asap. This is a workaround for a bug in begins
 # TODO: which provokes an exception when calling pypeman without parameters.
@@ -28,6 +28,12 @@ def load(file_path:'path to the file containing data'):
                 result.append(row)
 
     print(json.dumps(result))
+
+
+@begin.subcommand
+def serve(debug=False):
+    api.run_server(debug=debug, host='localhost', port=8080)
+
 
 @begin.start
 def main(version=False):

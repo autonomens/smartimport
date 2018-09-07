@@ -45,19 +45,19 @@ def dataset_to_json(dataset, guessed_types):
     return res
 
 
-def convert(input_file):
+def convert(input_file, chunk_size=250, guess_sample_size=200):
     """
     Analyse a file and guess column types.
 
-    :param file_path: file object containg original data
+    :param input_file: file object containg original data
     :return: result of the analysis in a json serializable object
     """
 
-    header = next(read_file_by_chunk(input_file, chunk_size=250 ))
+    sample = next(read_file_by_chunk(input_file, chunk_size=guess_sample_size))
 
-    guessed_types = typeguesser.guess(header)
+    guessed_types = typeguesser.guess(sample)
 
-    for chunk in read_file_by_chunk(input_file):
+    for chunk in read_file_by_chunk(input_file, chunk_size=chunk_size):
         result = chunk.apply(lambda row: dataset_to_json(row, guessed_types), axis=1)
 
         yield result.values.tolist()
