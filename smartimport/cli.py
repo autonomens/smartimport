@@ -3,6 +3,7 @@ import sys
 import json
 import begin
 import smartimport
+from smartimport import converter
 
 # TODO: remove below if statement asap. This is a workaround for a bug in begins
 # TODO: which provokes an exception when calling pypeman without parameters.
@@ -18,13 +19,15 @@ def train():
 def load(file_path:'path to the file containing data'):
     """ Transform a file from csv to json """
 
-    # analyze file
-    print('[')
-    for chunk in smartimport.converter.convert(file_path):
-        # TODO missing json decoration here
-        for d in chunk:
-            print(json.dumps(d), ',')
-    print(']')
+    with open(file_path, 'r') as input_file: 
+        # analyze file
+        result = []
+        for chunk in converter.convert(input_file):
+            for row in chunk:
+                # TODO stream json later
+                result.append(row)
+
+    print(json.dumps(result))
 
 @begin.start
 def main(version=False):

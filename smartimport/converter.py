@@ -6,47 +6,29 @@ import pandas as pd
 from smartimport import settings
 from smartimport import typeguesser
 
-def read_file_by_chunk(file_path, chunk_size=200):
+def read_file_by_chunk(input_file, chunk_size=200):
     """
     Generator to read file chunk by chunk.
 
-    :param file_path: File to read
+    :param input_file: File object to read
     :return: part of the file as Pandas dataframe.
     """
-    # Compute file extension.
-    filename, file_ext = os.path.splitext(file_path)
 
-    # For now, use the extension as filetype.
-    # TODO: eventually use python-magic
-    if (file_ext == '.csv'):
-        reader = pd.read_csv
-    elif (file_ext == '.xls'):
-        reader = pd.read_excel
-    elif (file_ext == '.json'):
-        reader = pd.read_json
-    elif (file_ext == '.xml'):
-        # Pandas does not read XML natively.
-        # TODO… (http://www.austintaylor.io/lxml/python/pandas/xml/dataframe/2016/07/08/convert-xml-to-pandas-dataframe/)
-        raise RuntimeError('Unable to read xml files')
-    else:
-        raise RuntimeError('Unsupported file type')
-
-    for df in reader(file_path,  dtype='str', sep=None, engine='python', chunksize=chunk_size):
-        yield df 
-
+    for df in pd.read_table(input_file,  dtype='str', sep=None, engine='python', chunksize=chunk_size):
+        yield df
 
 def dataset_to_json(dataset, guessed_types):
     res = {}
 
     # Get guessed type for whole data set
-    res['predicted_type'] = []
+    res['predicted_type'] = [('unknown', 1.0)]
 
     res['properties'] = []
 
+    original_names = dataset.index.values
     # for each column
     for idx, value in enumerate(dataset.values):
         # to get orignal names of the columns
-        original_names = dataset.index.values
         guessed_type = guessed_types[idx]
 
         # save column element analyse
@@ -63,22 +45,22 @@ def dataset_to_json(dataset, guessed_types):
     return res
 
 
-def convert(file_path):
+def convert(input_file):
     """
     Analyse a file and guess column types.
 
-    :param file_path: path of the file containg original data
+    :param file_path: file object containg original data
     :return: result of the analysis in a json serializable object
     """
 
-    header = next(read_file_by_chunk(file_path, chunk_size=250 ))
+    header = next(read_file_by_chunk(input_file, chunk_size=250 ))
 
     guessed_types = typeguesser.guess(header)
 
-    for chunk in read_file_by_chunk(file_path):
-        chunk.apply(lambda row: dataset_to_json(row, guessed_types))
+    for chunk in read_file_by_chunk(input_file):
+        result = chunk.apply(lambda row: dataset_to_json(row, guessed_types), axis=1)
 
-        yield chunk.values.tolist()
+        yield result.values.tolist()
 
 
 
