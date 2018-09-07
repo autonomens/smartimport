@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 bottle = "*"
+cython = "*"
+auto-sklearn = "*"
 
 [dev-packages]
 bumpversion = "*"

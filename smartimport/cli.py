@@ -29,11 +29,9 @@ def load(file_path:'path to the file containing data'):
 
     print(json.dumps(result))
 
-
 @begin.subcommand
 def serve(debug=False):
     api.run_server(debug=debug, host='localhost', port=8080)
-
 
 @begin.start
 def main(version=False):

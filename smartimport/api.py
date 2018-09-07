@@ -46,7 +46,7 @@ def convert_file():
                 for row in chunk:
                     result.append(row)
 
-    return {'result': result}
+    return {'file': data_file.filename, 'result': result}
 
 def run_server(debug=False, host="localhost", port="8080"):
     bottle.TEMPLATE_PATH = [os.path.join(settings.SRC_DIR, 'views')]
