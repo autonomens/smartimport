@@ -4,7 +4,7 @@ import pickle
 import pandas as pd
 
 from smartimport import settings
-from smartimport import typeguesser
+from smartimport import guesser
 
 def read_file_by_chunk(input_file, chunk_size=200):
     """
@@ -37,9 +37,9 @@ def dataset_to_json(dataset, guessed_types):
             'original_name' : original_names[idx],
             'original_value' : value,
             'value' : guessed_type.clean_value(value),
-            'fixed_value' : guessed_type.fix_value(value, dataset.values),
-            'anomaly_score' : guessed_type.anomaly_score(value),
-            'associated_properties' : guessed_type.complete_data(value, dataset.values),
+            #'fixed_value' : guessed_type.fix_value(value, dataset.values),
+            #'anomaly_score' : guessed_type.anomaly_score(value),
+            #'associated_properties' : guessed_type.complete_data(value, dataset.values),
         })
 
     return res
@@ -55,7 +55,9 @@ def convert(input_file, chunk_size=250, guess_sample_size=200):
 
     sample = next(read_file_by_chunk(input_file, chunk_size=guess_sample_size))
 
-    guessed_types = typeguesser.guess(sample)
+    input_file.seek(0) # Header consume file so we get back
+
+    guessed_types = guesser.guess(sample)
 
     for chunk in read_file_by_chunk(input_file, chunk_size=chunk_size):
         result = chunk.apply(lambda row: dataset_to_json(row, guessed_types), axis=1)

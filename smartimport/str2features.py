@@ -91,11 +91,12 @@ class OnePixelByPosition:
         matrix = np.zeros((self.depth, len(self.dictionnary)))
         matrix_pos = defaultdict(lambda : 0)
 
+        total = len(text)
         for pos, char in enumerate(text):
             lchar = char.lower()
             if lchar in self.dictionnary:
                 if matrix_pos[lchar] < self.depth:
-                    matrix[matrix_pos[lchar], self.dictionnary[lchar]] = 1 - ((pos + 1) / len(text))
+                    matrix[matrix_pos[lchar], self.dictionnary[lchar]] = (total - pos) / total
                     if char.isupper():
                         matrix[matrix_pos[lchar], self.dictionnary['upper']] = 1
                     matrix_pos[lchar] += 1
@@ -140,6 +141,7 @@ class OnePixelByPosition:
         img = Image.fromarray(rgb, 'RGB')
         return img
 
+
 if __name__ == '__main__':
     # Testing 
     # TODO Should be done with pytest
@@ -149,11 +151,11 @@ if __name__ == '__main__':
     print(algo1.convert("Bonjour monde"))
     print(algo1.to_str("Bonjour monde"))
 
-    #img = algo1.to_image("Bonjour monde 3356")
-    #img.show()
+    img = algo1.to_image("Bonjour monde 3356")
+    img.show()
 
     print(algo2.convert("Bonjour monde"))
     print(algo2.to_str("Bonjour monde"))
 
-    img = algo2.to_image("Bonjour monde 3356")
+    img = algo2.to_image("Bonjour monde 3345")
     img.show()

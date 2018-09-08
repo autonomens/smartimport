@@ -3,7 +3,7 @@ import sys
 import json
 import begin
 import smartimport
-from smartimport import converter, api
+from smartimport import converter, api, trainer
 
 # TODO: remove below if statement asap. This is a workaround for a bug in begins
 # TODO: which provokes an exception when calling pypeman without parameters.
@@ -12,8 +12,9 @@ if len(sys.argv) == 1:
     sys.argv.append('-h')
 
 @begin.subcommand
-def train():
-    """ Train a model from dataset (not working yet)"""
+def train(confusion=False):
+    """ Train a model from given dataset"""
+    trainer.train(display_confusion_matrix=confusion)
 
 @begin.subcommand
 def load(file_path:'path to the file containing data'):
