@@ -7,7 +7,8 @@ class OnePixelByLetter:
 
     def __init__(self, max_length=50, letters=DEFAULT_LETTERS):
         self.max_length = max_length
-        self.letters = letters
+        self.letters = list(letters)
+        self.letters.sort()
         # bag of characters dictionnary
         self.dictionnary = {}
         for idx, char in enumerate(self.letters):
@@ -75,7 +76,8 @@ class OnePixelByPosition:
 
     def __init__(self, depth=5, letters=DEFAULT_LETTERS):
         self.depth = depth
-        self.letters = letters
+        self.letters = list(set(letters) | set(letters.upper())) # Add upper letters
+        self.letters.sort()
         self.dictionnary = {}
 
         for idx, char in enumerate(self.letters):
@@ -83,8 +85,6 @@ class OnePixelByPosition:
 
         # For unknown letters
         self.dictionnary['unknown'] = len(self.letters)
-        # For uppercase
-        self.dictionnary['upper'] = len(self.letters) + 1
 
     def _to_matrix(self, text):
         # create bag by position of characters
@@ -93,15 +93,15 @@ class OnePixelByPosition:
 
         total = len(text)
         for pos, char in enumerate(text):
-            lchar = char.lower()
+            #lchar = char.lower()
+            lchar = char
             if lchar in self.dictionnary:
                 if matrix_pos[lchar] < self.depth:
                     matrix[matrix_pos[lchar], self.dictionnary[lchar]] = (total - pos) / total
-                    if char.isupper():
-                        matrix[matrix_pos[lchar], self.dictionnary['upper']] = 1
                     matrix_pos[lchar] += 1
             else:
-                matrix[matrix_pos['unknown']][self.dictionnary['unknown']] = 1
+                matrix[matrix_pos['unknown']][self.dictionnary['unknown']] = (total - pos) / total
+                matrix_pos[matrix_pos['unknown']] += 1
         return matrix
 
     def convert(self, text):
