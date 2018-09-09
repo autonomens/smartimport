@@ -1,13 +1,10 @@
 # Smart Import
 
 
-![pypi](https://img.shields.io/pypi/v/smartimport.svg)
-
-![travis](https://img.shields.io/travis/jrmi/smartimport.svg)
-
-![readthedocs](https://readthedocs.org/projects/smartimport/badge/?version=latest)
-
-![github](https://pyup.io/repos/github/jrmi/smartimport/shield.svg)
+![pypi](https://img.shields.io/pypi/v/smartimport.svg?display=inline-block) 
+![travis](https://img.shields.io/travis/jrmi/smartimport.svg?display=inline-block) 
+![readthedocs](https://readthedocs.org/projects/smartimport/badge/?version=latest?display=inline-block)
+![github](https://pyup.io/repos/github/jrmi/smartimport/shield.svg?display=inline-block)
 
 
 Smart file import with auto type detection.
