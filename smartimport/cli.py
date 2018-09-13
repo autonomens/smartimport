@@ -9,18 +9,20 @@ from smartimport import converter, api, trainer
 # TODO: which provokes an exception when calling pypeman without parameters.
 # TODO: more info at https://github.com/aliles/begins/issues/48
 if len(sys.argv) == 1:
-    sys.argv.append('-h')
+    sys.argv.append("-h")
+
 
 @begin.subcommand
 def train(confusion=False):
     """ Train a model from given dataset"""
     trainer.train(display_confusion_matrix=confusion)
 
+
 @begin.subcommand
-def load(file_path:'path to the file containing data'):
+def load(file_path: "path to the file containing data"):
     """ Transform a file from csv to json """
 
-    with open(file_path, 'r') as input_file: 
+    with open(file_path, "r") as input_file:
         # analyze file
         result = []
         for chunk in converter.convert(input_file):
@@ -30,9 +32,11 @@ def load(file_path:'path to the file containing data'):
 
     print(json.dumps(result))
 
+
 @begin.subcommand
 def serve(debug=False):
-    api.run_server(debug=debug, host='localhost', port=8080)
+    api.run_server(debug=debug, host="localhost", port=8080)
+
 
 @begin.start
 def main(version=False):
@@ -40,6 +44,3 @@ def main(version=False):
     if version:
         print(smartimport.__version__)
         sys.exit(0)
-
-
-

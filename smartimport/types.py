@@ -3,8 +3,8 @@
 import sys
 import inspect
 
-class GuessableType:
 
+class GuessableType:
     def anomaly_score(self, value):
         return 0.0
 
@@ -20,12 +20,13 @@ class GuessableType:
 
 class Unknown(GuessableType):
     """ Default type if type can't be determined """
-    name = 'unknown'
+
+    name = "unknown"
     label = 0
 
 
 class PhoneNumber(GuessableType):
-    name = 'phone_number'
+    name = "phone_number"
     label = 1
 
     def anomalie_score(self, value):
@@ -38,98 +39,114 @@ class PhoneNumber(GuessableType):
 
 
 class URL(GuessableType):
-    name = 'url'
+    name = "url"
     label = 2
 
 
 class Zipcode(GuessableType):
-    name = 'zipcode'
+    name = "zipcode"
     label = 3
 
 
 class CityName(GuessableType):
-    name = 'city'
+    name = "city"
     label = 4
 
 
 class Date(GuessableType):
-    name = 'date'
+    name = "date"
     label = 5
 
 
 class CompagnyName(GuessableType):
-    name = 'compagny_name'
+    name = "compagny_name"
     label = 6
-    
+
+
 class Number(GuessableType):
-    name = 'number'
+    name = "number"
     label = 7
-    
+
 
 class Address(GuessableType):
-    name = 'address'
+    name = "address"
     label = 8
-    
+
+
 class AddressSecondLine(GuessableType):
-    name = 'address_secondline'
+    name = "address_secondline"
     label = 9
 
+
 class AddressThirdLine(GuessableType):
-    name = 'address_thirdline'
+    name = "address_thirdline"
     label = 10
+
 
 class AddressStreetLine(GuessableType):
-    name = 'address_streetline'
+    name = "address_streetline"
     label = 10
 
+
 class AddressStreetLineNumber(GuessableType):
-    name = 'address_streetline_number'
+    name = "address_streetline_number"
     label = 11
 
+
 class AddressStreetLineCount(GuessableType):
-    name = 'address_streetline_count'
+    name = "address_streetline_count"
     label = 12
 
+
 class AddressStreetLineType(GuessableType):
-    name = 'address_streetline_type'
+    name = "address_streetline_type"
     label = 13
 
+
 class AddressStreetLineName(GuessableType):
-    name = 'address_streetline_name'
+    name = "address_streetline_name"
     label = 14
 
+
 class Cedex(GuessableType):
-    name = 'cedex'
+    name = "cedex"
     label = 15
 
+
 class DepartementCode(GuessableType):
-    name = 'department_code'
+    name = "department_code"
     label = 16
 
+
 class BrandName(GuessableType):
-    name = 'brand_name'
+    name = "brand_name"
     label = 17
 
+
 class NafCode(GuessableType):
-    name = 'naf_id'
+    name = "naf_id"
     label = 18
 
+
 class CountryName(GuessableType):
-    name = 'country'
+    name = "country"
     label = 19
 
+
 class Year(GuessableType):
-    name = 'year'
+    name = "year"
     label = 20
 
+
 class Coordinate(GuessableType):
-    name = 'coordinates'
+    name = "coordinates"
     label = 21
 
 
 # map to convert two ways
 _all_by_type = {}
 _all_by_label = {}
+
 
 def get_all_guessable_types():
     global _all_by_type
@@ -138,12 +155,17 @@ def get_all_guessable_types():
     if not _all_by_type:
         result = []
         for _, obj in inspect.getmembers(sys.modules[__name__]):
-            if inspect.isclass(obj) and issubclass(obj, GuessableType) and obj is not GuessableType:
+            if (
+                inspect.isclass(obj)
+                and issubclass(obj, GuessableType)
+                and obj is not GuessableType
+            ):
                 result.append(obj)
         _all_by_type = {C.name: C() for C in result}
         _all_by_label = {c.label: c for k, c in _all_by_type.items()}
 
     return _all_by_type
+
 
 def get_type_by_label(label):
     if not _all_by_label:
@@ -151,11 +173,13 @@ def get_type_by_label(label):
 
     return _all_by_label[label]
 
+
 def label_to_type(label):
     if not _all_by_label:
         get_all_guessable_types()
 
     return _all_by_label[label].name
+
 
 def type_to_label(type_name):
     return get_all_guessable_types()[type_name].label

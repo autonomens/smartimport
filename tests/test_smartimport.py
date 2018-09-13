@@ -5,8 +5,6 @@
 
 import pytest
 
-from click.testing import CliRunner
-
 import smartimport
 from smartimport import cli
 from smartimport import str2features

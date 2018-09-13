@@ -1,10 +1,10 @@
 from collections import defaultdict
 import numpy as np
 
-DEFAULT_LETTERS = 'azertyuiopqsdfghjklmwxcvbnéèçàâêîôûù1234567890,;.:!?/@- '
+DEFAULT_LETTERS = "azertyuiopqsdfghjklmwxcvbnéèçàâêîôûù1234567890,;.:!?/@- "
+
 
 class OnePixelByLetter:
-
     def __init__(self, max_length=50, letters=DEFAULT_LETTERS):
         self.max_length = max_length
         self.letters = list(letters)
@@ -14,14 +14,14 @@ class OnePixelByLetter:
         for idx, char in enumerate(self.letters):
             self.dictionnary[char] = idx
         # For unknown letters
-        self.dictionnary['unknown'] = len(self.letters)
+        self.dictionnary["unknown"] = len(self.letters)
         # For uppercase
-        self.dictionnary['upper'] = len(self.letters) + 1
+        self.dictionnary["upper"] = len(self.letters) + 1
 
     def _to_matrix(self, text):
         # check text length
         if len(text) >= self.max_length:
-            text = text[:self.max_length]
+            text = text[: self.max_length]
 
         # create bag of characters
         matrix = np.zeros((self.max_length, len(self.dictionnary)))
@@ -30,9 +30,9 @@ class OnePixelByLetter:
             if char.lower() in self.dictionnary:
                 matrix[idx, self.dictionnary[char.lower()]] += 1
                 if char.isupper():
-                    matrix[idx, self.dictionnary['upper']] += 1
+                    matrix[idx, self.dictionnary["upper"]] += 1
             else:
-                matrix[idx][self.dictionnary['unknown']] += 1
+                matrix[idx][self.dictionnary["unknown"]] += 1
 
         return matrix
 
@@ -56,27 +56,27 @@ class OnePixelByLetter:
 
         matrix = self._to_matrix(text)
         rgb = np.zeros((matrix.shape[0], matrix.shape[1], 3), dtype=np.uint8)
-        rgb[:, :, 0] = matrix*255
-        rgb[:, :, 1] = matrix*255
-        rgb[:, :, 2] = matrix*255
-        img = Image.fromarray(rgb, 'RGB')
+        rgb[:, :, 0] = matrix * 255
+        rgb[:, :, 1] = matrix * 255
+        rgb[:, :, 2] = matrix * 255
+        img = Image.fromarray(rgb, "RGB")
         return img
 
     def to_str(self, text):
         lines = []
-        lines.append(' '.join(self.letters))
+        lines.append(" ".join(self.letters))
 
         matrix = self._to_matrix(text)
         for row in matrix:
-            lines.append(' '.join(str(int(i)) for i in row))
+            lines.append(" ".join(str(int(i)) for i in row))
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
+
 
 class OnePixelByPosition:
-
     def __init__(self, depth=5, letters=DEFAULT_LETTERS):
         self.depth = depth
-        self.letters = list(set(letters) | set(letters.upper())) # Add upper letters
+        self.letters = list(set(letters) | set(letters.upper()))  # Add upper letters
         self.letters.sort()
         self.dictionnary = {}
 
@@ -84,24 +84,28 @@ class OnePixelByPosition:
             self.dictionnary[char] = idx
 
         # For unknown letters
-        self.dictionnary['unknown'] = len(self.letters)
+        self.dictionnary["unknown"] = len(self.letters)
 
     def _to_matrix(self, text):
         # create bag by position of characters
         matrix = np.zeros((self.depth, len(self.dictionnary)))
-        matrix_pos = defaultdict(lambda : 0)
+        matrix_pos = defaultdict(lambda: 0)
 
         total = len(text)
         for pos, char in enumerate(text):
-            #lchar = char.lower()
+            # lchar = char.lower()
             lchar = char
             if lchar in self.dictionnary:
                 if matrix_pos[lchar] < self.depth:
-                    matrix[matrix_pos[lchar], self.dictionnary[lchar]] = (total - pos) / total
+                    matrix[matrix_pos[lchar], self.dictionnary[lchar]] = (
+                        total - pos
+                    ) / total
                     matrix_pos[lchar] += 1
             else:
-                matrix[matrix_pos['unknown']][self.dictionnary['unknown']] = (total - pos) / total
-                matrix_pos[matrix_pos['unknown']] += 1
+                matrix[matrix_pos["unknown"]][self.dictionnary["unknown"]] = (
+                    total - pos
+                ) / total
+                matrix_pos[matrix_pos["unknown"]] += 1
         return matrix
 
     def convert(self, text):
@@ -120,13 +124,13 @@ class OnePixelByPosition:
 
     def to_str(self, text):
         lines = []
-        lines.append(' '.join("   %s" % l for l in self.letters))
+        lines.append(" ".join("   %s" % l for l in self.letters))
 
         matrix = self._to_matrix(text)
         for row in matrix:
-            lines.append(' '.join("%.2f" % i for i in row))
+            lines.append(" ".join("%.2f" % i for i in row))
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
     def to_image(self, text):
         """ Return a pillow image instance that can be saved with `img.save(path)`
@@ -135,15 +139,15 @@ class OnePixelByPosition:
 
         matrix = self._to_matrix(text)
         rgb = np.zeros((matrix.shape[0], matrix.shape[1], 3), dtype=np.uint8)
-        rgb[:, :, 0] = matrix*255
-        rgb[:, :, 1] = matrix*255
-        rgb[:, :, 2] = matrix*255
-        img = Image.fromarray(rgb, 'RGB')
+        rgb[:, :, 0] = matrix * 255
+        rgb[:, :, 1] = matrix * 255
+        rgb[:, :, 2] = matrix * 255
+        img = Image.fromarray(rgb, "RGB")
         return img
 
 
-if __name__ == '__main__':
-    # Testing 
+if __name__ == "__main__":
+    # Testing
     # TODO Should be done with pytest
     algo1 = OnePixelByLetter()
     algo2 = OnePixelByPosition()

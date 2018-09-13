@@ -6,6 +6,7 @@ import pandas as pd
 from smartimport import settings
 from smartimport import guesser
 
+
 def read_file_by_chunk(input_file, chunk_size=200):
     """
     Generator to read file chunk by chunk.
@@ -14,16 +15,19 @@ def read_file_by_chunk(input_file, chunk_size=200):
     :return: part of the file as Pandas dataframe.
     """
 
-    for df in pd.read_table(input_file,  dtype='str', sep=None, engine='python', chunksize=chunk_size):
+    for df in pd.read_table(
+        input_file, dtype="str", sep=None, engine="python", chunksize=chunk_size
+    ):
         yield df
+
 
 def dataset_to_json(dataset, guessed_types):
     res = {}
 
     # Get guessed type for whole data set
-    res['predicted_type'] = [('unknown', 1.0)]
+    res["predicted_type"] = [("unknown", 1.0)]
 
-    res['properties'] = []
+    res["properties"] = []
 
     original_names = dataset.index.values
     # for each column
@@ -32,15 +36,17 @@ def dataset_to_json(dataset, guessed_types):
         guessed_type = guessed_types[idx]
 
         # save column element analyse
-        res['properties'].append({
-            'type' : guessed_type.name,
-            'original_name' : original_names[idx],
-            'original_value' : value,
-            'value' : guessed_type.clean_value(value),
-            #'fixed_value' : guessed_type.fix_value(value, dataset.values),
-            #'anomaly_score' : guessed_type.anomaly_score(value),
-            #'associated_properties' : guessed_type.complete_data(value, dataset.values),
-        })
+        res["properties"].append(
+            {
+                "type": guessed_type.name,
+                "original_name": original_names[idx],
+                "original_value": value,
+                "value": guessed_type.clean_value(value),
+                # 'fixed_value' : guessed_type.fix_value(value, dataset.values),
+                # 'anomaly_score' : guessed_type.anomaly_score(value),
+                # 'associated_properties' : guessed_type.complete_data(value, dataset.values),
+            }
+        )
 
     return res
 
@@ -55,7 +61,7 @@ def convert(input_file, chunk_size=250, guess_sample_size=200):
 
     sample = next(read_file_by_chunk(input_file, chunk_size=guess_sample_size))
 
-    input_file.seek(0) # Header consume file so we get back
+    input_file.seek(0)  # Header consume file so we get back
 
     guessed_types = guesser.guess(sample)
 
@@ -63,11 +69,3 @@ def convert(input_file, chunk_size=250, guess_sample_size=200):
         result = chunk.apply(lambda row: dataset_to_json(row, guessed_types), axis=1)
 
         yield result.values.tolist()
-
-
-
-
-
-
-
-

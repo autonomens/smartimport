@@ -10,17 +10,22 @@ auto-sklearn = "*"
 matplotlib = "*"
 
 [dev-packages]
+tox = "*"
 bumpversion = "*"
 wheel = "*"
 watchdog = "*"
 "flake8" = "*"
-tox = "*"
 coverage = "*"
 sphinx = "*"
 twine = "*"
 pytest = "*"
 pytest-runner = "*"
 pylint = "*"
+tox-pipenv = {git = "https://github.com/tox-dev/tox-pipenv.git", editable = true}
+#tox-pipenv = "*"
 
 [requires]
 python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
