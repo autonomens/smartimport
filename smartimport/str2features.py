@@ -76,7 +76,9 @@ class OnePixelByLetter:
 class OnePixelByPosition:
     def __init__(self, depth=5, letters=DEFAULT_LETTERS):
         self.depth = depth
-        self.letters = list(set(letters) | set(letters.upper()))  # Add upper letters
+        self.letters = list(
+            set(letters) | set(letters.upper())
+        )  # Add upper letters
         self.letters.sort()
         self.dictionnary = {}
 

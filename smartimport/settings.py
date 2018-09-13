@@ -10,9 +10,12 @@ TRAINING_DATA_PATH = os.path.join(DATADIR, "training_data.csv")
 # algo key is mandatory, others are passed to constructor.
 STR2FEATURES_CONF = {"algo": "OnePixelByLetter", "max_length": 50}
 
-TRAINING_MODEL = ("sklearn.ensemble.ExtraTreesClassifier", dict(n_jobs=-1, verbose=0))
+TRAINING_MODEL = (
+    "sklearn.ensemble.ExtraTreesClassifier",
+    dict(n_jobs=-1, verbose=0),
+)
 
 try:
-    from settings_local import *
+    from settings_local import * # noqa
 except ImportError:
     pass

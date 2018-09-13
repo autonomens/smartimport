@@ -1,5 +1,5 @@
 import os
-import tempfile, shutil
+import tempfile
 
 import bottle
 from bottle import abort, post, get, request, run, route, view, static_file
@@ -39,7 +39,9 @@ def convert_file():
     result = []
 
     # create temp file
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=True) as temp_file:
+    with tempfile.NamedTemporaryFile(
+        mode="w", suffix=".csv", delete=True
+    ) as temp_file:
         data_file.save(temp_file.name, overwrite=True)
 
         # And read it

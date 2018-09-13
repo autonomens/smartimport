@@ -1,0 +1,51 @@
+image: ubuntu:bionic
+
+stages:
+  - linting
+  - tests
+
+variables:
+  DOCKER_DRIVER: overlay2
+  LC_ALL: C.UTF-8
+  LANG: C.UTF-8
+  TZ: Europe/Paris
+
+cache:
+  paths:
+    #- /var/cache/apt/
+    #- .cache/
+    - venv/
+
+before_script:
+- ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
+- apt-get update
+- apt-get install -y python3-pip
+- apt-get install -y $(grep -vE "^\s*#" apt.txt  | tr "\n" " ")
+- python3 -m venv venv/
+- ./venv/bin/pip3 install pipenv
+- ./venv/bin/pipenv install --dev
+
+flake8:
+  stage: linting
+  tags: [shared-ci-docker]
+  script:
+    - ./venv/bin/pipenv run flake8 smartimport
+
+tests:
+  stage: tests
+  variables: 
+    PYTHONPATH: .
+  tags: [shared-ci-docker]
+  script:
+    - ./venv/bin/pipenv run pytest smartimport
+
+
+#.deploy: &deploy # Deploy template
+#  image: ubuntu:bionic
+#  stage: deploy
+#  tags: [shared-ci-docker]
+#  when: manual
+#  only: 
+#    - master
+#  script:
+#    - ls

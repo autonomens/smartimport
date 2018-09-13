@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import time
-import json
 import pickle
 import importlib
 import itertools
@@ -13,7 +11,6 @@ import matplotlib.pyplot as plt
 
 from sklearn.model_selection import cross_validate, train_test_split
 from sklearn.metrics import confusion_matrix
-from sklearn import preprocessing
 
 from smartimport import settings, str2features, types
 
@@ -25,7 +22,9 @@ MK_BLUE = (30 / 255, 135 / 255, 104 / 255)
 MK_GRAY = (32 / 255, 28 / 255, 27 / 255)
 
 
-def plot_confusion_matrix(cm, classes, title="Confusion matrix", cmap=plt.cm.Purples):
+def plot_confusion_matrix(
+    cm, classes, title="Confusion matrix", cmap=plt.cm.Purples
+):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -86,10 +85,13 @@ def train(display_confusion_matrix=False, save_model=True):
     )  # Get module and class to load
     model_module = importlib.import_module(model_module_path)  # Load module
 
-    model = getattr(model_module, clazz)(**options)  # Create model instance with option
+    model = getattr(model_module, clazz)(
+        **options
+    )  # Create model instance with option
 
     print(
-        f"Use {model_path} module for training with str2feature algo {settings.STR2FEATURES_CONF['algo']}"
+        f"Use {model_path} module for training with "
+        f"str2feature algo {settings.STR2FEATURES_CONF['algo']}"
     )
 
     # get algo to compute features
@@ -129,7 +131,9 @@ def train(display_confusion_matrix=False, save_model=True):
         # plot normalized confusion matrix
         plt.figure(figsize=(20, 10))
         plot_confusion_matrix(
-            cnf_matrix, classes=[e[1] for e in labels], title="Confusion matrix"
+            cnf_matrix,
+            classes=[e[1] for e in labels],
+            title="Confusion matrix",
         )
         plt.show()
 

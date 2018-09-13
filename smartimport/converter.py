@@ -1,9 +1,5 @@
-import os
-import json
-import pickle
 import pandas as pd
 
-from smartimport import settings
 from smartimport import guesser
 
 
@@ -16,7 +12,11 @@ def read_file_by_chunk(input_file, chunk_size=200):
     """
 
     for df in pd.read_table(
-        input_file, dtype="str", sep=None, engine="python", chunksize=chunk_size
+        input_file,
+        dtype="str",
+        sep=None,
+        engine="python",
+        chunksize=chunk_size,
     ):
         yield df
 
@@ -66,6 +66,8 @@ def convert(input_file, chunk_size=250, guess_sample_size=200):
     guessed_types = guesser.guess(sample)
 
     for chunk in read_file_by_chunk(input_file, chunk_size=chunk_size):
-        result = chunk.apply(lambda row: dataset_to_json(row, guessed_types), axis=1)
+        result = chunk.apply(
+            lambda row: dataset_to_json(row, guessed_types), axis=1
+        )
 
         yield result.values.tolist()
