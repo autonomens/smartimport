@@ -2,7 +2,11 @@ import os
 import tempfile
 
 import bottle
-from bottle import abort, post, get, request, run, route, view, static_file, default_app
+from bottle import ( 
+    abort, post, get, request, 
+    run, route, view, static_file, 
+    default_app, template
+)
 
 from smartimport import converter, settings
 
@@ -16,17 +20,19 @@ def server_static(filename):
     return static_file(filename, root=os.path.join(settings.SRC_DIR, "static"))
 
 
-@get("/smartimport")
-@view("smartimport.tpl")
+@get("/")
+@view("form.tpl")
 def get_data_file():
     """ Default template when sending a file """
-    return {}
+    json_output = request.query.get("json", "False").lower() in ['true', 'on', '1']
+    return {'json': json_output}
 
 
-@post("/smartimport")
+@post("/")
 def convert_file():
     # get data file
     data_file = request.files.get("data_file")
+    json_output = request.query.get("json", "False").lower() in ['true', 'on', '1']
 
     # check a file is giveninput_data
     if data_file is None:
@@ -52,7 +58,11 @@ def convert_file():
                 for row in chunk:
                     result.append(row)
 
-    return {"file": data_file.filename, "result": result}
+    if json_output:
+        return {"file": data_file.filename, "result": result}
+    else:
+
+        return template('result.tpl', result=result)
 
 
 def run_debug_server(host, port):
