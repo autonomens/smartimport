@@ -13,7 +13,7 @@ if len(sys.argv) == 1:
 
 
 @begin.subcommand
-def train(confusion=False):
+def train(confusion: "Show confusion matrix at the end of the process"=False):
     """ Train a model from given dataset"""
     trainer.train(display_confusion_matrix=confusion)
 
@@ -34,12 +34,17 @@ def load(file_path: "path to the file containing data"):
 
 
 @begin.subcommand
-def serve(debug=False):
-    api.run_server(debug=debug, host="localhost", port=8080)
+def serve(
+    host: "Server host"="localhost", 
+    port: "Server port"=8080
+):
+    """ Start smartimport debug server"""
+    
+    api.run_debug_server(host=host, port=port)
 
 
 @begin.start
-def main(version=False):
+def main(version: "Show version and exit"=False):
     """ Smart import file analysis. """
     if version:
         print(smartimport.__version__)

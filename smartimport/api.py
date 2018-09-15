@@ -2,12 +2,13 @@ import os
 import tempfile
 
 import bottle
-from bottle import abort, post, get, request, run, route, view, static_file
+from bottle import abort, post, get, request, run, route, view, static_file, default_app
 
 from smartimport import converter, settings
 
 ALLOWED_EXT = (".csv",)
 
+bottle.TEMPLATE_PATH = [os.path.join(settings.SRC_DIR, "views")]
 
 @route("/static/<filename:path>")
 def server_static(filename):
@@ -54,9 +55,7 @@ def convert_file():
     return {"file": data_file.filename, "result": result}
 
 
-def run_server(debug=False, host="localhost", port="8080"):
-    bottle.TEMPLATE_PATH = [os.path.join(settings.SRC_DIR, "views")]
-    if debug:
-        run(host=host, port=port, debug=True, reloader=True)
-    else:
-        run(server="gunicorn", host=host, port=port)
+def run_debug_server(host, port):
+    run(host=host, port=port, debug=True, reloader=True)
+
+app = default_app()

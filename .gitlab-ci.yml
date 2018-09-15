@@ -14,7 +14,6 @@ before_script:
 - ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} > /etc/timezone
 - apt-get update
 - apt-get install -y $(grep -vE "^\s*#" apt.txt  | tr "\n" " ")
-- pip install --upgrade pip
 - pip install pipenv
 - pipenv install --dev --three
 

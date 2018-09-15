@@ -28,7 +28,7 @@ tox-pipenv = {git = "https://github.com/tox-dev/tox-pipenv.git", editable = true
 #tox-pipenv = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3"
 
 [pipenv]
 allow_prereleases = true
