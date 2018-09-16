@@ -2,20 +2,49 @@
 
 import sys
 import inspect
+import numpy as np
 
+# TODO add common names for each types to add guessing probability
+# TODO add thematic to allow file type determination
+# TODO add some conversion function to avoid bad cleaning
 
 class GuessableType:
+    name = ":Unamed:"
+    label = -1
+
     def anomaly_score(self, value):
         return 0.0
 
     def clean_value(self, value):
-        return value.strip()
+        """ Clean the value """
+        if value is None:
+            return ''
+        return value
 
     def fix_value(self, value, dataset):
+        """ Fix value if needed """
         return [(value, 1.0)]
 
     def complete_data(self, value, dataset):
+        """ Add side data """
         return []
+
+    def populate_header(self, header_dict, data):
+        """ Add data to header if necessary """
+        return header_dict
+
+    @property
+    def header_name(self):
+        return f"{self.name}"
+
+    def to_json(self):
+        return f"{self.name}"
+
+    def __str__(self):
+        return f"<{self.name}({self.label})>"
+
+    def __repr__(self):
+        return f"<{self.name.upper()}({self.label})>"
 
 
 class Unknown(GuessableType):
@@ -23,7 +52,6 @@ class Unknown(GuessableType):
 
     name = "unknown"
     label = 0
-
 
 class PhoneNumber(GuessableType):
     name = "phone_number"
@@ -66,6 +94,16 @@ class CompagnyName(GuessableType):
 class Number(GuessableType):
     name = "number"
     label = 7
+
+    def clean_value(self, value):
+        """ Clean the value """
+        if value is None:
+            return ''
+        try:
+            return str(int(value))
+        except:
+            print(f"Can't convert {value}")
+            return str(value)
 
 
 class Address(GuessableType):

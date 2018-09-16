@@ -3,35 +3,14 @@
     margin:auto;
 }
 
-/*h1{
+h1{
     color:#574460;
-    text-align: center;
-    border-style: solid;
-    border-width: 0px 0px 5px 0px;
-    border-color: #201C1B;
 }
 
 h3{
     color:#1E8768;
-}*/
-
-/*#result table{
-    overflow: auto;
-    width: 90vw;
-    height: 90vh;
 }
-#result td{
-    max-width: 10em;
-    text-overflow: ellipsis;
-    border: 1px black solid;
-    overflow-wrap: unset;
-    white-space: nowrap;
-    overflow: hidden;
-}*/
 
-#result tr{
-    
-}
 .table-responsive{
     height: 80vh;
     max-height: 80vh;

@@ -54,15 +54,14 @@ def convert_file():
         # And read it
         with open(temp_file.name) as input_file:
             # analyze file using smart import
-            for chunk in converter.convert(input_file):
-                for row in chunk:
-                    result.append(row)
+            result = converter.convert(input_file)
 
     if json_output:
-        return {"file": data_file.filename, "result": result}
+        return {
+            "file": data_file.filename}.update(result)
     else:
 
-        return template('result.tpl', result=result)
+        return template('result.tpl', **result)
 
 
 def run_debug_server(host, port):

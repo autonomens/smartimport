@@ -16,14 +16,25 @@
   </head>
   <body>
     <div id="result">
-        <h1>Smart Import</h1>
+        <h1>Smart Import</h1> <a href="/">Home</a>
         <div class="table-responsive">
             <table class="table table-striped table-hover table-sm">
-            <tbody>
-            % for row in result:
+            <thead>
                 <tr>
-                % for data in row['properties']:
-                    <td data-toggle="tooltip" data-placement="top" title="{{data}}">{{data['value']}}</td>
+                % for header in headers:
+                    <td data-toggle="tooltip" data-placement="top" data-delay="1000" title="{{header}}">
+                      {{header['guessed_type'].name}}{{'*' if header['enum_score'] > 0.95 else ''}} : {{header['name']}}
+                    </td>
+                % end
+                </tr>
+            </thead>
+            <tbody>
+            % for row in content:
+                <tr>
+                % for item in row['properties']:
+                    <td>
+                      {{item['value']}}
+                    </td>
                 % end
                 </tr>
             % end

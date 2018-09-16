@@ -1,8 +1,8 @@
 from collections import defaultdict
+
 import numpy as np
 
 DEFAULT_LETTERS = "azertyuiopqsdfghjklmwxcvbnéèçàâêîôûù1234567890,;.:!?/@- "
-
 
 class OnePixelByLetter:
     def __init__(self, max_length=50, letters=DEFAULT_LETTERS):
