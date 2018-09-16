@@ -2,11 +2,11 @@
 
 import sys
 import inspect
-import numpy as np
 
 # TODO add common names for each types to add guessing probability
 # TODO add thematic to allow file type determination
 # TODO add some conversion function to avoid bad cleaning
+
 
 class GuessableType:
     name = ":Unamed:"
@@ -18,7 +18,7 @@ class GuessableType:
     def clean_value(self, value):
         """ Clean the value """
         if value is None:
-            return ''
+            return ""
         return value
 
     def fix_value(self, value, dataset):
@@ -52,6 +52,7 @@ class Unknown(GuessableType):
 
     name = "unknown"
     label = 0
+
 
 class PhoneNumber(GuessableType):
     name = "phone_number"
@@ -98,10 +99,10 @@ class Number(GuessableType):
     def clean_value(self, value):
         """ Clean the value """
         if value is None:
-            return ''
+            return ""
         try:
             return str(int(value))
-        except:
+        except ValueError:
             print(f"Can't convert {value}")
             return str(value)
 

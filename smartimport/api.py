@@ -2,10 +2,17 @@ import os
 import tempfile
 
 import bottle
-from bottle import ( 
-    abort, post, get, request, 
-    run, route, view, static_file, 
-    default_app, template
+from bottle import (
+    abort,
+    post,
+    get,
+    request,
+    run,
+    route,
+    view,
+    static_file,
+    default_app,
+    template,
 )
 
 from smartimport import converter, settings
@@ -13,6 +20,7 @@ from smartimport import converter, settings
 ALLOWED_EXT = (".csv",)
 
 bottle.TEMPLATE_PATH = [os.path.join(settings.SRC_DIR, "views")]
+
 
 @route("/static/<filename:path>")
 def server_static(filename):
@@ -24,15 +32,15 @@ def server_static(filename):
 @view("form.tpl")
 def get_data_file():
     """ Default template when sending a file """
-    json_output = request.query.get("json", "False").lower() in ['true', 'on', '1']
-    return {'json': json_output}
+    json_output = request.query.get("json", "False").lower() in ["true", "on", "1"]
+    return {"json": json_output}
 
 
 @post("/")
 def convert_file():
     # get data file
     data_file = request.files.get("data_file")
-    json_output = request.query.get("json", "False").lower() in ['true', 'on', '1']
+    json_output = request.query.get("json", "False").lower() in ["true", "on", "1"]
 
     # check a file is giveninput_data
     if data_file is None:
@@ -46,9 +54,7 @@ def convert_file():
     result = []
 
     # create temp file
-    with tempfile.NamedTemporaryFile(
-        mode="w", suffix=".csv", delete=True
-    ) as temp_file:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=True) as temp_file:
         data_file.save(temp_file.name, overwrite=True)
 
         # And read it
@@ -57,14 +63,14 @@ def convert_file():
             result = converter.convert(input_file)
 
     if json_output:
-        return {
-            "file": data_file.filename}.update(result)
+        return {"file": data_file.filename}.update(result)
     else:
 
-        return template('result.tpl', **result)
+        return template("result.tpl", **result)
 
 
 def run_debug_server(host, port):
     run(host=host, port=port, debug=True, reloader=True)
+
 
 app = default_app()

@@ -1,7 +1,7 @@
 import pandas as pd
-import numpy as np
 
 from smartimport import guesser
+
 
 def dataset_to_json(row, headers):
     res = {}
@@ -13,9 +13,9 @@ def dataset_to_json(row, headers):
     res["properties"] = []
 
     for h, value in zip(headers, row):
-        guessed_type = h['guessed_type']
-        
-        if str(value) == 'nan': # Remove nan values
+        guessed_type = h["guessed_type"]
+
+        if str(value) == "nan":  # Remove nan values
             value = None
 
         # save column element analyse
@@ -31,14 +31,11 @@ def dataset_to_json(row, headers):
 
     return res
 
+
 def convert(input_file):
     """ Convert input table to json data """
 
-    data = pd.read_table(
-        input_file,
-        sep=None,
-        engine="python",
-    )
+    data = pd.read_table(input_file, sep=None, engine="python")
 
     headers = guesser.guess(data)
 
@@ -47,4 +44,4 @@ def convert(input_file):
     for row in data.values:
         result.append(dataset_to_json(row, headers))
 
-    return {'headers': headers, 'content': result}
+    return {"headers": headers, "content": result}
