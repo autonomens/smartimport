@@ -57,13 +57,13 @@ def prepare_for_learning(df, algo):
     df = df.copy()
 
     # Convert text to feature
-    df["data"] = df["data"].apply(lambda x: algo.convert(x))
+    df["value"] = df["value"].apply(lambda x: algo.convert(x))
 
     # Convert to 1D vector
     features = np.ndarray((df.shape[0], algo.nb_features()), dtype=np.int8)
 
     # store in numpy array (can't be done directly with apply method of DataFrame)
-    for idx, feature in enumerate(df["data"].values):
+    for idx, feature in enumerate(df["value"].values):
         features[idx] = feature
 
     guessable_types = types.get_all_guessable_types()
@@ -73,7 +73,7 @@ def prepare_for_learning(df, algo):
     return features, df.type.values
 
 
-def train(display_confusion_matrix=False, save_model=True):
+def train(data_file=settings.TRAINING_DATA_PATH, display_confusion_matrix=False, save_model=True):
     """ Actually train the model from the given data file """
 
     model_path, options = settings.TRAINING_MODEL
@@ -94,7 +94,7 @@ def train(display_confusion_matrix=False, save_model=True):
     conf = dict(settings.STR2FEATURES_CONF)
     algo_features = getattr(str2features, conf.pop("algo"))(**conf)
 
-    training_data = pd.read_csv(settings.TRAINING_DATA_PATH, dtype="str")
+    training_data = pd.read_csv(data_file, dtype="str")
 
     # features, labels, nb_labels, labels_names = prepare_for_learning(training_data, algo_features)
     features, labels = prepare_for_learning(training_data, algo_features)

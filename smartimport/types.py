@@ -58,13 +58,15 @@ class PhoneNumber(GuessableType):
     name = "phone_number"
     label = 1
 
+    # TODO  use https://github.com/daviddrysdale/python-phonenumbers
+
     def anomalie_score(self, value):
         # TODO define a phone number regex to allow detecting bad number
         return 0.0
 
-    def fix_value(self, value, dataset):
-        # TODO Add phone number formatter
-        return [(value, 1.0)]
+    def clean_value(self, value):
+        value = super().clean_value(value)
+        return value
 
 
 class URL(GuessableType):
@@ -85,6 +87,8 @@ class CityName(GuessableType):
 class Date(GuessableType):
     name = "date"
     label = 5
+
+    # TODO use https://dateparser.readthedocs.io/en/latest/
 
 
 class CompagnyName(GuessableType):
@@ -178,9 +182,27 @@ class Year(GuessableType):
 
 
 class Coordinate(GuessableType):
-    name = "coordinates"
+    name = "coordinate"
     label = 21
 
+
+class PersonName(GuessableType):
+    name = "person_name"
+    label = 22
+    
+
+class PersonSurname(GuessableType):
+    name = "person_surname"
+    label = 23
+
+
+class MuseumName(GuessableType):
+    name = "museum_name"
+    label = 24
+
+
+# TODO Add region, department, museum, insee, school, 
+# association, money, firstname_m, firstname_w, lastname, gender
 
 # map to convert two ways
 _all_by_type = {}

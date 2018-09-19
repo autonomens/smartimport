@@ -24,9 +24,12 @@ JSONEncoder.default = _default
 
 
 @begin.subcommand
-def train(confusion: "Show confusion matrix at the end of the process" = False):
+def train(
+    confusion: "Show confusion matrix at the end of the process" = False,
+    data: "Path to training data file" = None,
+):
     """ Train a model from given dataset"""
-    trainer.train(display_confusion_matrix=confusion)
+    trainer.train(data_file=data, display_confusion_matrix=confusion)
 
 
 @begin.subcommand
