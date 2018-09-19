@@ -35,7 +35,7 @@ def dataset_to_json(row, headers):
 def convert(input_file):
     """ Convert input table to json data """
 
-    data = pd.read_table(input_file, sep=None, engine="python")
+    data = pd.read_table(input_file, sep=None, dtype='str', engine="python")
 
     headers = guesser.guess(data)
 

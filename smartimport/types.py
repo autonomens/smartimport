@@ -2,6 +2,7 @@
 
 import sys
 import inspect
+import itertools
 
 # TODO add common names for each types to add guessing probability
 # TODO add thematic to allow file type determination
@@ -46,17 +47,18 @@ class GuessableType:
     def __repr__(self):
         return f"<{self.name.upper()}({self.label})>"
 
+label_gen = itertools.count(0)
 
 class Unknown(GuessableType):
     """ Default type if type can't be determined """
 
     name = "unknown"
-    label = 0
+    label = next(label_gen)
 
 
 class PhoneNumber(GuessableType):
-    name = "phone_number"
-    label = 1
+    name = "phonenumber"
+    label = next(label_gen)
 
     # TODO  use https://github.com/daviddrysdale/python-phonenumbers
 
@@ -71,36 +73,35 @@ class PhoneNumber(GuessableType):
 
 class URL(GuessableType):
     name = "url"
-    label = 2
+    label = next(label_gen)
 
 
 class Zipcode(GuessableType):
     name = "zipcode"
-    label = 3
-
+    label = next(label_gen)
 
 class CityName(GuessableType):
     name = "city"
-    label = 4
+    label = next(label_gen)
 
 
 class Date(GuessableType):
     name = "date"
-    label = 5
+    label = next(label_gen)
 
     # TODO use https://dateparser.readthedocs.io/en/latest/
 
 
 class CompagnyName(GuessableType):
     name = "compagny_name"
-    label = 6
+    label = next(label_gen)
 
 
 class Number(GuessableType):
     name = "number"
-    label = 7
+    label = next(label_gen)
 
-    def clean_value(self, value):
+    def _clean_value(self, value):
         """ Clean the value """
         if value is None:
             return ""
@@ -113,92 +114,62 @@ class Number(GuessableType):
 
 class Address(GuessableType):
     name = "address"
-    label = 8
-
-
-class AddressSecondLine(GuessableType):
-    name = "address_secondline"
-    label = 9
-
-
-class AddressThirdLine(GuessableType):
-    name = "address_thirdline"
-    label = 10
-
-
-class AddressStreetLine(GuessableType):
-    name = "address_streetline"
-    label = 10
-
-
-class AddressStreetLineNumber(GuessableType):
-    name = "address_streetline_number"
-    label = 11
-
-
-class AddressStreetLineCount(GuessableType):
-    name = "address_streetline_count"
-    label = 12
-
-
-class AddressStreetLineType(GuessableType):
-    name = "address_streetline_type"
-    label = 13
-
-
-class AddressStreetLineName(GuessableType):
-    name = "address_streetline_name"
-    label = 14
+    label = next(label_gen)
 
 
 class Cedex(GuessableType):
     name = "cedex"
-    label = 15
+    label = next(label_gen)
 
 
 class DepartementCode(GuessableType):
     name = "department_code"
-    label = 16
+    label = next(label_gen)
 
 
 class BrandName(GuessableType):
     name = "brand_name"
-    label = 17
+    label = next(label_gen)
 
 
 class NafCode(GuessableType):
     name = "naf_id"
-    label = 18
+    label = next(label_gen)
 
 
 class CountryName(GuessableType):
     name = "country"
-    label = 19
+    label = next(label_gen)
 
 
 class Year(GuessableType):
     name = "year"
-    label = 20
+    label = next(label_gen)
 
 
 class Coordinate(GuessableType):
     name = "coordinate"
-    label = 21
+    label = next(label_gen)
 
 
-class PersonName(GuessableType):
-    name = "person_name"
-    label = 22
+class PersonLastame(GuessableType):
+    name = "person_lastname"
+    label = next(label_gen)
     
 
-class PersonSurname(GuessableType):
-    name = "person_surname"
-    label = 23
+class PersonFirstname(GuessableType):
+    name = "person_firstname"
+    label = next(label_gen)
 
 
 class MuseumName(GuessableType):
     name = "museum_name"
-    label = 24
+    label = next(label_gen)
+
+
+class CountryCode(GuessableType):
+    name = "country_code"
+    label = next(label_gen)
 
 
 # TODO Add region, department, museum, insee, school, 

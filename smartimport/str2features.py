@@ -116,7 +116,7 @@ class OnePixelByPosition:
         :return: a matrix representing the text
         """
 
-        # return as 1D vector to match with skicit-learn implementation of ML methods
+        # return as 1D vector to match with scikit-learn implementation of ML methods
         result = self._to_matrix(text)
         return result.reshape(result.size)
 

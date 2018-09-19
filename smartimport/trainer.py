@@ -94,9 +94,8 @@ def train(data_file=settings.TRAINING_DATA_PATH, display_confusion_matrix=False,
     conf = dict(settings.STR2FEATURES_CONF)
     algo_features = getattr(str2features, conf.pop("algo"))(**conf)
 
-    training_data = pd.read_csv(data_file, dtype="str")
+    training_data = pd.read_csv(data_file, dtype="str").dropna()
 
-    # features, labels, nb_labels, labels_names = prepare_for_learning(training_data, algo_features)
     features, labels = prepare_for_learning(training_data, algo_features)
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -116,9 +115,11 @@ def train(data_file=settings.TRAINING_DATA_PATH, display_confusion_matrix=False,
     if display_confusion_matrix:
         y_pred = model.predict(X_test)  # Try to predict
 
+        unique = set(y_pred)
+
         # labels_names = [t.label for t in types.get_all_guessable_types()
         all_types = types.get_all_guessable_types()
-        labels = [(c.label, k) for k, c in all_types.items()]
+        labels = [(c.label, k) for k, c in all_types.items() if c.label in unique]
         labels.sort()
 
         # Compute confusion matrix
