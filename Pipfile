@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 bottle = "*"
 cython = "*"
-matplotlib = "*"
+matplotlib = ">=3.0.1"
 begins = "*"
 pandas = "*"
 numpy = "*"
@@ -24,7 +24,7 @@ twine = "*"
 pytest = "*"
 pytest-runner = "*"
 pylint = "*"
-tox-pipenv = {git = "https://github.com/tox-dev/tox-pipenv.git", editable = true}
+#tox-pipenv = {git = "https://github.com/tox-dev/tox-pipenv.git", editable = true}
 #tox-pipenv = "*"
 
 [requires]

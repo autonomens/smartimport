@@ -47,7 +47,9 @@ class GuessableType:
     def __repr__(self):
         return f"<{self.name.upper()}({self.label})>"
 
+
 label_gen = itertools.count(0)
+
 
 class Unknown(GuessableType):
     """ Default type if type can't be determined """
@@ -79,6 +81,7 @@ class URL(GuessableType):
 class Zipcode(GuessableType):
     name = "zipcode"
     label = next(label_gen)
+
 
 class CityName(GuessableType):
     name = "city"
@@ -155,7 +158,7 @@ class Coordinate(GuessableType):
 class PersonLastame(GuessableType):
     name = "person_lastname"
     label = next(label_gen)
-    
+
 
 class PersonFirstname(GuessableType):
     name = "person_firstname"
@@ -172,7 +175,7 @@ class CountryCode(GuessableType):
     label = next(label_gen)
 
 
-# TODO Add region, department, museum, insee, school, 
+# TODO Add region, department, museum, insee, school,
 # association, money, firstname_m, firstname_w, lastname, gender
 
 # map to convert two ways
