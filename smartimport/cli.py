@@ -1,4 +1,5 @@
 """Console script for smartimport."""
+
 import sys
 import json
 import begin
@@ -25,7 +26,7 @@ JSONEncoder.default = _default
 
 @begin.subcommand
 def train(
-    confusion: "Show confusion matrix at the end of the process" = False,
+    confusion: "Show confusion matrix at the end of the process" = False, # noqa
     data: "Path to training data file" = None,
 ):
     """ Train a model from given dataset"""

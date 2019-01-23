@@ -68,8 +68,8 @@ def guess(data):
         ]
 
         if (
-            header["all_predictions"][0][0].label != 0
-            or len(header["all_predictions"]) <= 1
+            header["all_predictions"][0][0].label != 0 or
+            len(header["all_predictions"]) <= 1
         ):
             # More frequent type
             header["guessed_type"] = header["all_predictions"][0][0]
